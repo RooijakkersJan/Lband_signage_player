@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:keepScreenOn="true"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.ApplicationAddOnsLband.activities.HomeActivity"
+    android:background="@color/black"
+    android:fitsSystemWindows="true"
+    android:id="@+id/mainContainer">
+
+    <com.github.rongi.rotate_layout.layout.RotateLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/rotateimg"
+        app:angle="0">
+
+        <ImageView
+            android:id="@+id/previmg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:visibility="invisible"/>
+    </com.github.rongi.rotate_layout.layout.RotateLayout>
+
+    <com.github.rongi.rotate_layout.layout.RotateLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/rotatevideo1"
+        app:angle="0">
+
+        <com.ApplicationAddOnsLband.custom_views.Lvideoads
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/video_viewads"
+            />
+    </com.github.rongi.rotate_layout.layout.RotateLayout>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txttimer"
+        android:textSize="50dp"
+        android:visibility="invisible"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="5dp"
+        android:textColor="@color/black"
+        android:text="00"/>
+
+
+    <RelativeLayout
+        android:id="@+id/relative_container"
+        android:layout_width="200dp"
+        android:layout_height="230dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true">
+
+
+
+        <ProgressBar
+            android:id="@+id/p_Bar2"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="35dp"
+            android:layout_height="50dp"
+            android:visibility="gone"
+            android:indeterminate="true"
+            android:max="100"
+            android:progress="0" />
+
+        <ImageView
+            android:layout_width="200dp"
+            android:layout_height="150dp"
+            android:layout_above="@+id/p_Bar2"
+            android:id="@+id/waitimg"
+            android:layout_centerInParent="true"
+            android:scaleType="fitCenter"
+            android:src="@drawable/logonusign1"
+            android:visibility="gone"
+            />
+
+        <ListView
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/listViewPlaylists"
+            android:layout_alignParentStart="true"
+            android:visibility="gone"
+            />
+
+        <ProgressBar
+            android:id="@+id/circularProgress"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:max="100"
+            android:progress="0"
+            android:progressDrawable="@drawable/circular_progress_shape"
+            >
+        </ProgressBar>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtTokenId"
+            android:layout_marginTop="10dp"
+            android:visibility="invisible"
+            android:layout_marginBottom="10dp"
+            android:layout_below="@+id/waitimg"
+            android:layout_centerHorizontal="true"
+            android:textSize="20dp"
+            android:textColor="#ffffff"
+            android:text="Token ID"/>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtWaitingContent"
+            android:layout_below="@+id/p_Bar2"
+            android:layout_marginTop="0dp"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            android:textSize="20dp"
+            android:textColor="#ffffff"
+            android:text="Waiting for Content"/>
+
+    </RelativeLayout>
+
+    <ListView
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/listViewSongs"
+        android:layout_alignParentEnd="true"
+        android:visibility="gone"/>
+
+    <com.github.rongi.rotate_layout.layout.RotateLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/rotatevideo"
+        app:angle="0">
+
+        <com.ApplicationAddOnsLband.custom_views.MyClaudVideoView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/video_view"
+            />
+    </com.github.rongi.rotate_layout.layout.RotateLayout>
+
+    <com.github.rongi.rotate_layout.layout.RotateLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/rotateweb"
+        app:angle="0">
+
+        <WebView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:id="@+id/webView" />
+    </com.github.rongi.rotate_layout.layout.RotateLayout>
+
+    <ImageView
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:id="@+id/marker"
+        android:paddingTop="0dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/red"
+        android:layout_marginEnd="0dp"
+        android:visibility="visible"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="0dp"
+        />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtWritingFile"
+        android:layout_above="@+id/relative_container"
+        android:layout_centerHorizontal="true"
+        android:textColor="#FFFFFF"
+        android:textSize="20dp"
+        android:layout_marginBottom="20dp" />
+
+
+    <include
+        layout="@layout/layoutmp3"
+        android:id="@+id/mp3layout"
+        android:visibility="invisible"
+        />
+
+
+    <include
+        layout="@layout/blacklayout"
+        android:id="@+id/blacklayout"
+        android:visibility="invisible"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/white"
+        android:textColor="@color/black"
+        android:textSize="30dp"
+        android:layout_alignParentBottom="true"
+        android:gravity="center_vertical"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
+        android:visibility="gone"
+        android:id="@+id/marqueetxt" />
+
+</RelativeLayout>
+

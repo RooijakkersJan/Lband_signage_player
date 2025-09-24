@@ -1,0 +1,76 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.google.firebase.crashlytics'
+apply plugin: 'com.google.gms.google-services'
+
+repositories {
+    mavenCentral()
+    jcenter()
+    maven { url 'https://guardian.github.com/maven/repo-releases' }
+    maven { url "https://jitpack.io" }
+
+}
+
+buildscript {
+
+    repositories {
+        jcenter()
+    }
+
+
+}
+
+android {
+    namespace 'com.ApplicationAddOnsLband'
+    compileSdk 33
+
+    defaultConfig {
+        applicationId "com.ApplicationAddOnsLband"
+        minSdkVersion 21
+        targetSdkVersion 33
+        versionCode 18
+        versionName "2.04"
+
+    }
+
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation files('libs/hisense_api.jar')
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
+    implementation 'androidx.documentfile:documentfile:1.0.1'
+    testImplementation 'junit:junit:4.12'
+    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'androidx.work:work-runtime:2.7.1'
+
+   // implementation platform('com.google.firebase:firebase-bom:32.1.0')
+    implementation 'com.google.firebase:firebase-messaging:20.1.6'
+    implementation 'com.google.firebase:firebase-core:21.1.1'
+   // implementation 'com.bugfender.sdk:android:3.+'
+    implementation 'com.squareup.okhttp3:okhttp:3.8.0'
+    implementation 'com.github.rahatarmanahmed:circularprogressview:2.5.0'
+  //  implementation 'rongi.rotate-layout:rotate-layout:v3.0.0'
+    implementation 'com.github.rongi:rotate-layout:v3.0.0'
+    implementation 'eu.chainfire:libsuperuser:1.1.1'
+    implementation 'com.microsoft.signalr:signalr:7.0.0'
+    implementation 'org.slf4j:slf4j-jdk14:1.7.25'
+    implementation 'com.koushikdutta.ion:ion:3.1.0'
+    //implementation 'com.google.firebase:firebase-crashlytics'
+   // implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-crashlytics:17.0.0'
+     implementation 'com.google.firebase:firebase-analytics:21.3.0'
+
+}

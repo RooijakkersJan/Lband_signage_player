@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1053957673494",
+    "project_id": "applicationaddonssignage",
+    "storage_bucket": "applicationaddonssignage.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1053957673494:android:2e72b459bc7c0fa5f4db37",
+        "android_client_info": {
+          "package_name": "com.ApplicationAddOnsLband"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDB7rNPHGlHo1g4sFOxAeW758eS92UM7z4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1053957673494:android:64350499d53f41a9f4db37",
+        "android_client_info": {
+          "package_name": "com.ApplicationAddonsSignage"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDB7rNPHGlHo1g4sFOxAeW758eS92UM7z4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

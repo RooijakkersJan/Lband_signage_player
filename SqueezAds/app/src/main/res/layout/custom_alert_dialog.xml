@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="550dp"
+    android:layout_height="300dp"
+    android:gravity="center_horizontal"
+    android:layout_gravity="center"
+    android:padding="@dimen/size_10dp"
+    android:background="@drawable/alert_playlist">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_centerHorizontal="true"
+        android:text="Reset Parameter"
+        android:textColor="@color/black"
+        android:textSize="25dp"
+        />
+
+    <RadioGroup
+        android:id="@+id/radiofamily"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:layout_marginStart="30dp">
+
+
+        <RadioButton
+            android:id="@+id/radiasp_0"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:buttonTint="#0000FF"
+            android:text="0 (Landscape Normal)"
+            android:textColor="@color/black"
+            android:textSize="20dp" />
+
+        <RadioButton
+            android:id="@+id/radiasp_90"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:buttonTint="#0000FF"
+            android:text="90 (Portrait Right)"
+            android:textColor="@color/black"
+            android:textSize="20dp" />
+
+        <RadioButton
+            android:id="@+id/radiasp_180"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:buttonTint="#0000FF"
+            android:text="180 (Inverse Landscape)"
+            android:textColor="@color/black"
+            android:textSize="20dp" />
+
+        <RadioButton
+            android:id="@+id/radiasp_270"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:buttonTint="#0000FF"
+            android:text="270 (Portrait Left)"
+            android:textColor="@color/black"
+            android:textSize="20dp" />
+    </RadioGroup>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/radiofamily"
+        android:id="@+id/btnsplashsave"
+        android:layout_marginTop="10dp"
+        android:layout_centerInParent="true"
+        android:background="@color/player_background"
+        android:textColor="@color/white"
+        android:text="Save"
+        />
+
+</RelativeLayout>
