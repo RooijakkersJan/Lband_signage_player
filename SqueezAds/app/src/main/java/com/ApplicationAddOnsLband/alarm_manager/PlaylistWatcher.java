@@ -39,6 +39,7 @@ public class PlaylistWatcher {
      *
      ***********************************************************/
     public static final int NO_PLAYLIST = 0;
+    public int countermin=0;
 
 
     /***********************************************************
@@ -276,6 +277,7 @@ public class PlaylistWatcher {
                         ADVERTISEMENT_TIME_Store = ADVERTISEMENT_TIME;
                         ADVERTISEMENT_TIME_COUNTER=0;
                     }
+
                     if (ADVERTISEMENT_TIME_COUNTER == ADVERTISEMENT_TIME) {
                         if (PlaylistWatcher.this.playlistStatusListener != null) {
                             if((arrAdvertisementsTimeFilter!=null) && (arrAdvertisementsTimeFilter.size()>0)) {
@@ -396,6 +398,7 @@ public class PlaylistWatcher {
 
 
             if(!cTime.equals(currentTime)) {
+                countermin++;
                 cTime = currentTime;
                 if ((playlistsAll == null) || (playlistsAll.size() == 0)) {
                     cDate = "";
@@ -501,9 +504,14 @@ public class PlaylistWatcher {
                 if (AlenkaMedia.playlistStatus == -12){
                     AlenkaMedia.playlistStatus = playlistStatus;
                 }
-                getFiltertimeadv();
+
+                if(countermin==60) {
+                    getFiltertimeadv();
+                    countermin=0;
+                }
                 //getFilterSongadv();
             }
+
 
 
             if (!isPaused)
@@ -520,7 +528,6 @@ public class PlaylistWatcher {
     }
 
     public void pausePlaylistWatcher(){
-
         isPaused = true;
     }
 

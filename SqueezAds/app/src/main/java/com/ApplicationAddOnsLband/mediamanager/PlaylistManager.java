@@ -1186,6 +1186,23 @@ public class PlaylistManager implements OkHttpUtil.OkHttpResponse {
         return null;
     }
 
+    public ArrayList<Playlist> getAllPlaylistCatSchd(){
+
+        try {
+            playlistDataSource.open();
+
+            return playlistDataSource.getAllDistinctPlaylists();
+
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        finally {
+            playlistDataSource.close();
+        }
+        return null;
+    }
+
+
     public ArrayList<Songs> getSongsForPlaylistRandom(String playlistId){
         try {
             songsDataSource.open();

@@ -67,7 +67,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
                 if (type.equalsIgnoreCase("Next")) {
                     // Utilities.showToast(MyFirebaseMessagingService.this,"Request Received");
-                    HomeActivity.getInstance().playnextsongfromweb(id,Url,AlbumId,ArtistId,titlename,Artistname,repeat,Long.parseLong(filesize),cat);
+                    HomeActivity.getInstance().playnextsongfromweb(id,Url,AlbumId,ArtistId,titlename,Artistname,repeat,Long.parseLong(filesize),cat,"");
                 }
 
                 if ((datatype.equalsIgnoreCase("Publish")) && (type.equalsIgnoreCase("UpdateNow"))) {

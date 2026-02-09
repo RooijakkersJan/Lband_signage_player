@@ -3,9 +3,10 @@ package com.ApplicationAddOnsLband.utils;
 
 public class Constants {
 
- // public static final String SERVER = "https://applicationaddons.com/api/";
+ public static final String SERVER = "https://applicationaddons.com/api/";
+  //public static final String SERVER = "https://api.htvled.com/api/";
 
-  public static final String SERVER = "https://api.lcdmedia-audio.com/api/";
+ // public static final String SERVER = "https://api.lcdmedia-audio.com/api/";
 // public static final String SERVER = "https://api.uat.display-anywhere.com/api/";
    public static final String VIDEO_TAG = "videolbd";
     public static final String PLAYER_TYPE = "Android";

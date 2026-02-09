@@ -41,7 +41,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/lcdmedialogin" />
+                    android:src="@drawable/smclogin" />
 
             </LinearLayout>
 

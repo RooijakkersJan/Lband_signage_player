@@ -146,22 +146,19 @@ public class SongsDataSource {
     }
 
     public ArrayList<Songs> getAllSongssRandom(String id) {
-        ArrayList<Songs> songss = new ArrayList<Songs>();
+            ArrayList<Songs> songss = new ArrayList<Songs>();
+            Cursor cursor = database.query(MySQLiteHelper.TABLE_SONGS,
+                    allColumns, MySQLiteHelper.COLUMN_IS_DOWNLOADED + " = " + 1 , null, null, null,"RANDOM()");//"RANDOM()"
+            cursor.moveToFirst();
 
-        Cursor cursor = database.query(MySQLiteHelper.TABLE_SONGS,
-                allColumns, MySQLiteHelper.COLUMN_IS_DOWNLOADED + " = " + 1
-                + " AND " + MySQLiteHelper.COLUMN_SP_PLAYLIST_ID+ " = " + id,
-                null, null, null,"RANDOM()");
-        cursor.moveToFirst();
-
-        while (!cursor.isAfterLast()) {
-            Songs songs = cursorToSongs(cursor);
-            songss.add(songs);
-            cursor.moveToNext();
-        }
-        // make sure to close the cursor
-        cursor.close();
-        return songss;
+            while (!cursor.isAfterLast()) {
+                Songs songs = cursorToSongs(cursor);
+                songss.add(songs);
+                cursor.moveToNext();
+            }
+            // make sure to close the cursor
+            cursor.close();
+            return songss;
     }
 
     public ArrayList<Songs> getAllDownloadedSongs(String Songid) {

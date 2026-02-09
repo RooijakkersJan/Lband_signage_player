@@ -439,7 +439,7 @@ public class PlayerStatusManager implements OkHttpUtil.OkHttpResponse {
                 jsonObject.put("TokenId",SharedPreferenceUtil.getStringPreference(PlayerStatusManager.this.context,Constants.TOKEN_ID));
                 jsonObject.put("FreeSpace",(megAvailable+megAvailable1));
                 jsonObject.put("TotalSpace",(megTotAvailable+megTotAvailable1));
-                jsonObject.put("verNo", "2.12");
+                jsonObject.put("verNo", "2.13");
                 jsonObject.put("IpAddress",IpPortal);
 
                 new OkHttpUtil(this.context,Constants.DOWNLOADINGPROCESS,jsonObject.toString(),

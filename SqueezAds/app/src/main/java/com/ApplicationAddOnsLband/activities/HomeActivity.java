@@ -5,6 +5,7 @@ import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -13,6 +14,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -27,6 +29,7 @@ import android.os.Looper;
 import android.os.StatFs;
 
 import androidx.core.content.ContextCompat;
+import androidx.core.widget.TextViewCompat;
 import androidx.documentfile.provider.DocumentFile;
 import androidx.appcompat.app.AlertDialog;
 import androidx.work.ExistingPeriodicWorkPolicy;
@@ -35,20 +38,25 @@ import androidx.work.WorkManager;
 
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -85,6 +93,7 @@ import com.ApplicationAddOnsLband.utils.SignalRClient;
 import com.ApplicationAddOnsLband.utils.StorageUtils;
 import com.ApplicationAddOnsLband.utils.UpdateWithoutRestart;
 import com.ApplicationAddOnsLband.utils.Utilities;
+import com.bumptech.glide.Glide;
 import com.github.rongi.rotate_layout.layout.RotateLayout;
 import com.hisense.hotel.HisenseManager;
 import com.hisense.hotel.HotelSystemManager;
@@ -103,11 +112,13 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import eu.chainfire.libsuperuser.Shell;
 import okhttp3.Call;
@@ -127,6 +138,9 @@ public class HomeActivity extends Activity implements DownloadListener, OkHttpUt
     public static final String TAG = "HomeActivity";
 
     private final int VIDEO_VIEW_TAG = 1;
+    boolean rearrange=false;
+    int txtdurdia=0;
+    int txtdur;
     public int y = 1;
 
     String gblfadevol="";
@@ -206,6 +220,8 @@ public class HomeActivity extends Activity implements DownloadListener, OkHttpUt
     private int currentlyPlayingSongAtIndex = 0;
 
     public static int currentlyPlayingAdAtIndex = -1;
+    public TextView textAlarm;
+    public ImageView ImgAlarmdialog;
     public static int currentlyPlayingAdAtIndexMin = -1;
     public static int currentlyPlayingAdAtIndexSong = -1;
     public static int currentlyPlayingAdAtIndexTime = -1;
@@ -215,6 +231,8 @@ public class HomeActivity extends Activity implements DownloadListener, OkHttpUt
 //    private //VideoView//123videoViewAds;
 //ko
     private PlaylistWatcher alarm;
+    public int currentCatPlaylistIndex=0;
+
 
 
 //    Handler checkForPlaylistStatus   = new Handler();
@@ -239,6 +257,8 @@ public class HomeActivity extends Activity implements DownloadListener, OkHttpUt
     public int temploopads=1;
     public String artistdownload = "";
     public boolean IsInstantPlaying=false;
+    HashMap<String, Integer> PlaylistSongindex = new HashMap<String, Integer>();
+
     private int playlistcounter = 0;
 
     private String sdCardLocation = "";
@@ -283,15 +303,17 @@ public class HomeActivity extends Activity implements DownloadListener, OkHttpUt
     private int imgcounter = 0;
     private int EXPORT_VIDEO_INDEX = 0;
     private TextView txtFileWriter;
-
+    ArrayList<Songs> filtersongsArrayList=new ArrayList<Songs>();
+    ArrayList<Playlist> playlistCatSchd;
     private ImageView Imgicon;
     private ImageView waitImgicon;
     private ImageView myImage;
+    public Dialog pickerDialog;
     // private ImageView Imgicon1;
     private TextView txtSong;
     private TextView txtArtist;
     private TextView txttimer;
-    private CountDownTimer imgCountdowntimer,initiateCountTimer,imgCountdowntimer1, imgCountdowntimer2,KeyCountdownTimer,UrlCountdowntimerAd,Squeezectdtimer,Squeezectdtimerend;
+    private CountDownTimer imgCountdowntimer,alarmtxtCountTimer,imgCountdowntimer1, imgCountdowntimer2,KeyCountdownTimer,UrlCountdowntimerAd,Squeezectdtimer,Squeezectdtimerend;
     private CountDownTimer mCountDownTimer;
     boolean isCountDownTimerRunning = false;
     private long downloadId;
@@ -471,67 +493,16 @@ public class HomeActivity extends Activity implements DownloadListener, OkHttpUt
                 }
                 else
                 {
-                    for(int i=0;i<arrPlaylists.size();i++)
-                    {
-                        if (downloadedSongPlaylistId.equals(arrPlaylists.get(i).getsplPlaylist_Id())) {
-
-                            arrSongs.add(song);
-                        }
+                    if(filtersongsArrayList!=null) {
+                        filtersongsArrayList.add(song);
                     }
                 }
 
-                if (!(DownloadService.songsToBeDownloaded.size() - 1 > DownloadService.downloadingFileAtIndex)) {
+                if ((DownloadService.songsToBeDownloaded.size() - 1) > (DownloadService.downloadingFileAtIndex)) {
 
-                    if (arrSongs.size() > 0) arrSongs.clear();
-
-                    String schtype1 = SharedPreferenceUtil.getStringPreference(HomeActivity.this, AlenkaMediaPreferences.SchType);
-                    if (schtype1.equals("Normal")) {
-
-                        songsArrayList = new PlaylistManager(HomeActivity.this, null).getSongsForPlaylist(arrPlaylists.get(0).getsplPlaylist_Id());
-                    }
-                    else
-                        {
-                            playlists.clear();
-                            noRepeat.clear();
-                            playlists.addAll(arrPlaylists);
-                            for (Playlist event : playlists) {
-                                boolean isFound = false;
-                                // check if the event name exists in noRepeat
-                                for (Playlist e : noRepeat) {
-                                    if (e.getsplPlaylist_Id().equalsIgnoreCase(event.getsplPlaylist_Id()))
-                                        isFound = true;
-                                }
-                                if (!isFound) {
-                                    noRepeat.add(event);
-                                }
-                            }
-                            for(int i=0; i<noRepeat.size(); i++) {
-                                //songsArrayListMerge.clear();
-                                songsArrayList.clear();
-                                songsArrayListMerge = new PlaylistManager(HomeActivity.this, null).getSongsForPlaylistRandom(noRepeat.get(i).getsplPlaylist_Id());
-                                songsArrayList.addAll(songsArrayListMerge);
-                            }
-                        //songsArrayList = new PlaylistManager(HomeActivity.this, null).getSongsForPlaylistRandom(arrPlaylists.get(0).getsplPlaylist_Id());
-
-                    }
-
-
-                    if (songsArrayList != null && songsArrayList.size() > 0) {
-
-                        arrSongs.addAll(songsArrayList);
-                    }
-
-                    if (arrSongs.size() > 0) {
-
-                        if (arrPlaylists.get(0).getIsSeparatinActive() == 1) {
-                            sort(arrSongs);
-
-                        }
-
-                        songAdapter = new SongAdapter(HomeActivity.this, arrSongs);
-                        lvSongs.setAdapter(songAdapter);
-                        lvSongs.deferNotifyDataSetChanged();
-                    }
+                }
+                else{
+                    rearrange=true;
 
                 }
 
@@ -548,6 +519,41 @@ public class HomeActivity extends Activity implements DownloadListener, OkHttpUt
             }
         }
 
+    }
+
+    public void  checkindexingafterdownloadCompletition()
+    {
+        String schtype = SharedPreferenceUtil.getStringPreference(HomeActivity.this, AlenkaMediaPreferences.SchType);
+
+        if (arrSongs.size() > 0) arrSongs.clear();
+
+        if (schtype.equals("Normal")) {
+            songsArrayList = new PlaylistManager(HomeActivity.this, null).getSongsForPlaylist(arrPlaylists.get(0).getsplPlaylist_Id());
+        } else {
+            songsArrayList = new PlaylistManager(HomeActivity.this, null).getSongsForPlaylistRandom(arrPlaylists.get(0).getsplPlaylist_Id());
+
+            if(filtersongsArrayList!=null) {
+                filtersongsArrayList.clear();
+            }
+            filtersongsArrayList.addAll(songsArrayList);
+        }
+
+        if (songsArrayList != null && songsArrayList.size() > 0) {
+            arrSongs.addAll(songsArrayList);
+
+        }
+
+        if (arrSongs.size() > 0) {
+
+            if (arrPlaylists.get(0).getIsSeparatinActive() == 1) {
+                sort(arrSongs);
+
+            }
+
+            songAdapter = new SongAdapter(HomeActivity.this, arrSongs);
+            lvSongs.setAdapter(songAdapter);
+            lvSongs.deferNotifyDataSetChanged();
+        }
     }
 
     @Override
@@ -723,7 +729,7 @@ public class HomeActivity extends Activity implements DownloadListener, OkHttpUt
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
-        /*HisenseManager.getInstance().addServiceReadyListener(new IServicesReadyListener() {
+        HisenseManager.getInstance().addServiceReadyListener(new IServicesReadyListener() {
             @Override
             public void allServicesReady() {
                  hsm=new HotelSystemManager();
@@ -751,7 +757,7 @@ public class HomeActivity extends Activity implements DownloadListener, OkHttpUt
                  }
             }
         });
-        HisenseManager.getInstance().init(HomeActivity.this);*/
+        HisenseManager.getInstance().init(HomeActivity.this);
         if (!MyService.isServiceRunning) {
             Intent serviceIntent = new Intent(this, MyService.class);
             ContextCompat.startForegroundService(this, serviceIntent);
@@ -831,6 +837,17 @@ public class HomeActivity extends Activity implements DownloadListener, OkHttpUt
         imglayout.setAngle(Integer.parseInt(rotation));
         videolayout.setAngle(Integer.parseInt(rotation));
         rotateweb.setAngle(Integer.parseInt(rotation));
+        int minTextSize = 12; // in SP
+        int maxTextSize = 130; // in SP
+        int stepGranularity = 2; // in SP
+        TextViewCompat.setAutoSizeTextTypeUniformWithConfiguration(
+                txtSong,
+                minTextSize,
+                maxTextSize,
+                stepGranularity,
+                TypedValue.COMPLEX_UNIT_SP // Un
+                // it for all the above values
+        );
         String strtuptype= SharedPreferenceUtil.getStringPreference(HomeActivity.this, AlenkaMediaPreferences.Startup);
         //TODO: Handle the new custom view crash and send crash log.
         ArrayList<Songs> songs = getSongsToBeDownloaded();
@@ -1377,7 +1394,7 @@ public class HomeActivity extends Activity implements DownloadListener, OkHttpUt
                            advertisementDataSource.open();
                            advertisementDataSource.insertAdvertisement(url, songid);
                            advertisementDataSource.close();
-                           startDownloadingnextSongs(url, songid, filesize, cat);
+                           startDownloadingnextSongs(url, songid, filesize, cat,"","");
                        }
                        catch (Exception e)
                        {
@@ -1397,8 +1414,7 @@ public class HomeActivity extends Activity implements DownloadListener, OkHttpUt
 
    public void stopCurrentSong(String cat)
    {
-
-       if(cat.equals("Normal")) {
+       if(cat.equalsIgnoreCase("instant") || cat.equalsIgnoreCase("song")) {
            Handler handler = new Handler(HomeActivity.this.getMainLooper());
            handler.post(new Runnable() {
                @Override
@@ -1411,15 +1427,33 @@ public class HomeActivity extends Activity implements DownloadListener, OkHttpUt
                    playNextSongIex=-1;
                    temploop=0;
                    IsInstantPlaying=false;
-                   String p = arrPlaylists.get(0).getsplPlaylist_Id();
-                   String h = PlaylistWatcher.currentPlaylistID;
-                   if(p.equals(h)) {
-                       checkimgSuccesive();
-                   }
-                   else {
-                       getPlaylistsForCurrentTime();
-                   }
+                   checkimgSuccesive();
                   // playCurrentContent(arrSongs,currentlyPlayingSongAtIndex);
+
+               }
+           });
+       }
+       if(cat.equalsIgnoreCase("alarm"))
+       {
+           Handler handler = new Handler(HomeActivity.this.getMainLooper());
+           handler.post(new Runnable() {
+               @Override
+               public void run() {
+                   if(pickerDialog!=null)
+                   {
+                       pickerDialog.dismiss();
+                   }
+                   if(alarmtxtCountTimer!=null)
+                   {
+                       alarmtxtCountTimer.cancel();
+                   }
+                   if (mPreview.isPlaying()) {
+                       mPreview.stopPlayback();
+                       mPreview.reset();
+                       mPreview.clearSurfaceView();
+                   }
+                   checkimgSuccesive();
+                   // playCurrentContent(arrSongs,currentlyPlayingSongAtIndex);
 
                }
            });
@@ -1430,7 +1464,7 @@ public class HomeActivity extends Activity implements DownloadListener, OkHttpUt
 
 
 
-    public void playnextsongfromweb(String songid, String url, String albumid, String artistid, final String title, final String artname,int repeat,long filesize,String cat) {
+    public void playnextsongfromweb(String songid, String url, String albumid, String artistid, final String title, final String artname,int repeat,long filesize,String cat,String screencasttype) {
         try {
             if(cat.equals("Ads"))
             {
@@ -1439,6 +1473,22 @@ public class HomeActivity extends Activity implements DownloadListener, OkHttpUt
                 instantadsinitiate(songid,repeat,url,filesize,cat);
                 return;
             }
+
+            if(url.equals(""))
+            {
+             //   setAlarmText(title,artname,albumid);
+                if(pickerDialog!=null)
+                {
+                    pickerDialog.dismiss();
+                }
+                if(alarmtxtCountTimer!=null)
+                {
+                    alarmtxtCountTimer.cancel();
+                }
+                opendialogAlarmText(title,artname,albumid,screencasttype);
+                return;
+            }
+
             gblSongid = songid;
             titledownload = title;
             artistdownload = artname;
@@ -1459,7 +1509,7 @@ public class HomeActivity extends Activity implements DownloadListener, OkHttpUt
                         //Utilities.showToast(HomeActivity.this,"Song Available==>"+songid);
                         h = 1;
                         IsInstantPlaying=true;
-                        playCurrentContent(arrSongsweb,i);
+                        playCurrentContent(arrSongsweb,i,title,artname);
                       //  playNextSongIex = i;
                         break;
                     }
@@ -1473,8 +1523,7 @@ public class HomeActivity extends Activity implements DownloadListener, OkHttpUt
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        startDownloadingnextSongs(url, songid, filesize,cat);
-
+                        startDownloadingnextSongs(url, songid, filesize,cat,title,artname);
                     }
                 });
 
@@ -1494,7 +1543,7 @@ public class HomeActivity extends Activity implements DownloadListener, OkHttpUt
 
     }
 
-   public void playCurrentContent(ArrayList<Songs> arrinst,int instantcurrindex)
+   public void playCurrentContent(ArrayList<Songs> arrinst,int instantcurrindex,String txt,String logourl)
    {
        try {
           // playNextSongIex=instantcurrindex;
@@ -1570,6 +1619,62 @@ public class HomeActivity extends Activity implements DownloadListener, OkHttpUt
                });
 
            }
+           if (a.equals("mp3")) {
+
+               Handler handler = new Handler(HomeActivity.this.getMainLooper());
+               handler.post(new Runnable() {
+                   @Override
+                   public void run() {
+                       if(pickerDialog!=null)
+                       {
+                           pickerDialog.dismiss();
+                       }
+                       if(alarmtxtCountTimer!=null)
+                       {
+                           alarmtxtCountTimer.cancel();
+                       }
+                       if (mPreview.isPlaying()) {
+                           mPreview.stopPlayback();
+                           mPreview.reset();
+                           mPreview.clearSurfaceView();
+                       }
+                       Log.d(TAG, "123");
+                       if ((y == 0) && (myImage != null)) {
+                           myImage.setVisibility(View.INVISIBLE);
+                           myImage.setImageDrawable(null);
+                       }
+                       y=1;
+                       txtArtist.setVisibility(View.INVISIBLE);
+                       txtSong.setVisibility(View.VISIBLE);
+                       txtSong.setText(txt);
+                       portraitmp3layout.setVisibility(View.VISIBLE);
+                       //mPreview.setVisibility(View.VISIBLE);
+                       mPreview.playMedia(arrinst.get(instantcurrindex).getSongPath(), 1, 1);
+                      // Imgicon.setVisibility(View.VISIBLE);
+                       if(!logourl.equals("")) {
+                           Imgicon.setVisibility(View.VISIBLE);
+                           Glide.with(HomeActivity.this)
+                                   .load(logourl)
+                                   .into(Imgicon);
+                       }
+
+                       if(temploop==1)
+                       {
+                           playNextSongIex=instantcurrindex;
+                           IsInstantPlaying=true;
+                       }
+
+                       else
+                       {
+                           titleidmatch="";
+                           playNextSongIex=-1;
+                           temploop=0;
+                       }
+
+                   }
+               });
+
+           }
        }catch(Exception e)
        {
            e.getCause();
@@ -1580,7 +1685,7 @@ public class HomeActivity extends Activity implements DownloadListener, OkHttpUt
 
 
 
-    public void startDownloadingnextSongs(String urlinst, String title,long filesize,String cat) {
+    public void startDownloadingnextSongs(String urlinst, String title,long filesize,String cat,String text,String artname) {
 
         try {
             String url = urlinst;
@@ -1630,7 +1735,7 @@ public class HomeActivity extends Activity implements DownloadListener, OkHttpUt
                     }
                     else {
                         songsrc.downloadupdate(k, sngpath.getPath(), gblSongid);
-                        fillalldownloadsongs(gblSongid);
+                        fillalldownloadsongs(gblSongid,text,artname);
                     }
                 }
                 else {
@@ -1691,7 +1796,7 @@ public class HomeActivity extends Activity implements DownloadListener, OkHttpUt
                                                             }
                                                         } else {
                                                             songsrc.downloadupdate(k, sngpath.getPath(), gblSongid);
-                                                            fillalldownloadsongs(gblSongid);
+                                                            fillalldownloadsongs(gblSongid,text,artname);
                                                         }
                                                     }
                                                 }
@@ -1760,7 +1865,7 @@ public class HomeActivity extends Activity implements DownloadListener, OkHttpUt
                                                     }
                                                     else {
                                                         songsrc.downloadupdate(k, sngpath.getPath(), gblSongid);
-                                                        fillalldownloadsongs(gblSongid);
+                                                        fillalldownloadsongs(gblSongid,text,artname);
                                                     }
                                                 }
                                             }
@@ -1791,7 +1896,7 @@ public class HomeActivity extends Activity implements DownloadListener, OkHttpUt
 
     }
 
-    public void fillalldownloadsongs(String songid)
+    public void fillalldownloadsongs(String songid,String text,String artname)
     {
         try {
 
@@ -1806,7 +1911,7 @@ public class HomeActivity extends Activity implements DownloadListener, OkHttpUt
                 for (int i = 0; i < arrSongsweb.size(); i++) {
                     String t = arrSongsweb.get(i).getTitle_Id();
                     if (t.equals(songid)) {
-                        playCurrentContent(arrSongsweb,i);
+                        playCurrentContent(arrSongsweb,i,text,artname);
                         //playNextSongIex = i;
                         //  Utilities.showToast(HomeActivity.this,"Time to play");
                         break;
@@ -2396,6 +2501,7 @@ public class HomeActivity extends Activity implements DownloadListener, OkHttpUt
         @Override
         public void onCompletion(MediaPlayer mediaPlayer) {
             try {
+                titleidmatch="";
 
                 if(imgCountdowntimer!=null) {
                     imgCountdowntimer.cancel();
@@ -2405,6 +2511,10 @@ public class HomeActivity extends Activity implements DownloadListener, OkHttpUt
                 }
                 if(imgCountdowntimer2!=null) {
                     imgCountdowntimer2.cancel();
+                }
+                if(rearrange==true) {
+                    checkindexingafterdownloadCompletition();
+                    rearrange=false;
                 }
 
                 if(mPreview.isPlaying())
@@ -2422,14 +2532,17 @@ public class HomeActivity extends Activity implements DownloadListener, OkHttpUt
                 }
                 else {
                     IsInstantPlaying=false;
-                      //  playads=true;
+                    String schtype=SharedPreferenceUtil.getStringPreference(HomeActivity.this,AlenkaMediaPreferences.SchType);
+                    if(schtype.equals("Normal")) {
                         if (arrSongs.size() - 1 > currentlyPlayingSongAtIndex) {
                             currentlyPlayingSongAtIndex++;
-
                         } else {
                             currentlyPlayingSongAtIndex = 0;
                         }
-                    // Utilities.showToast(HomeActivity.this,"OnComplete");
+                    }
+                    else {
+                        getCatschdParameters();
+                    }
 
                 }
 
@@ -2840,6 +2953,7 @@ public class HomeActivity extends Activity implements DownloadListener, OkHttpUt
     {
 
         try {
+            titleidmatch="";
 
             if(imgCountdowntimer!=null) {
                 imgCountdowntimer.cancel();
@@ -2854,7 +2968,6 @@ public class HomeActivity extends Activity implements DownloadListener, OkHttpUt
             {
                 return;
             }
-
 
             if(playNextSongIex!=-1)
             {
@@ -2871,12 +2984,19 @@ public class HomeActivity extends Activity implements DownloadListener, OkHttpUt
                 }
             }
 
-            if (arrSongs.size() - 1 > currentlyPlayingSongAtIndex) {
-                IsInstantPlaying=false;
-                currentlyPlayingSongAtIndex++;
-            } else {
-                currentlyPlayingSongAtIndex = 0;
+            String schtype=SharedPreferenceUtil.getStringPreference(HomeActivity.this,AlenkaMediaPreferences.SchType);
+            if(schtype.equals("Normal")) {
+                if (arrSongs.size() - 1 > currentlyPlayingSongAtIndex) {
+                    currentlyPlayingSongAtIndex++;
+                } else {
+                    currentlyPlayingSongAtIndex = 0;
+                }
             }
+            else {
+                getCatschdParameters();
+            }
+
+
             if((arrAdvertisementsSong!=null) && (arrAdvertisementsSong.size()>0)) {
                 PlaylistWatcher.PLAY_AD_AFTER_SONGS_COUNTER++;
 
@@ -3803,6 +3923,11 @@ public class HomeActivity extends Activity implements DownloadListener, OkHttpUt
        // hsm.setCurrentVolumeMin()
     }
 
+    public void getAllPlaylistSchdcategory()
+    {
+        playlistCatSchd = new PlaylistManager(HomeActivity.this, null).getAllPlaylistCatSchd();
+
+    }
 
     private void getSongsForPlaylist(Playlist playlist){
       try {
@@ -3833,36 +3958,25 @@ public class HomeActivity extends Activity implements DownloadListener, OkHttpUt
               songsArrayList = new PlaylistManager(HomeActivity.this, null).getSongsForPlaylist(playlist.getsplPlaylist_Id());
           }
           else {
-                //testing
-              playlists.clear();
-              noRepeat.clear();
-              playlists.addAll(arrPlaylists);
-              for (Playlist event : playlists) {
-                  boolean isFound = false;
-                  // check if the event name exists in noRepeat
-                  for (Playlist e : noRepeat) {
-                      if (e.getsplPlaylist_Id().equalsIgnoreCase(event.getsplPlaylist_Id()))
-                          isFound = true;
-                  }
-                  if (!isFound) {
-                      noRepeat.add(event);
-                  }
+              songsArrayList = new PlaylistManager(HomeActivity.this, null).getSongsForPlaylistRandom(playlist.getsplPlaylist_Id());
+              if(filtersongsArrayList!=null) {
+                  filtersongsArrayList.clear();
               }
-
-              for(int i=0; i<noRepeat.size(); i++) {
-                  //songsArrayListMerge.clear();
-                  songsArrayListMerge = new PlaylistManager(HomeActivity.this, null).getSongsForPlaylistRandom(noRepeat.get(i).getsplPlaylist_Id());
-                  songsArrayList.addAll(songsArrayListMerge);
+              filtersongsArrayList.addAll(songsArrayList);
+              getAllPlaylistSchdcategory();
+              if((playlistCatSchd!=null) && (playlistCatSchd.size()>0)) {
+                  List<Songs> filterlist=getfiltersonglistplaylistwise(filtersongsArrayList,playlistCatSchd.get(currentCatPlaylistIndex).getsplPlaylist_Id());
+                  if(filterlist.size()>0) {
+                      songsArrayList.clear();
+                      songsArrayList.addAll(filterlist);
+                      PlaylistSongindex.put(playlistCatSchd.get(currentCatPlaylistIndex).getsplPlaylist_Id(),currentlyPlayingSongAtIndex);
+                  }
               }
 
           }
 
-
-          // ArrayList<Songs> songsArrayList = new PlaylistManager(HomeActivity.this,null).getSongsForPlaylist(playlist.getsplPlaylist_Id());
-
-          if ((songsArrayList != null) && (songsArrayList.size() > 0)) {
+          if ((songsArrayList != null) && (songsArrayList.size() > 0)){
               arrSongs.addAll(songsArrayList);
-
           }
 
           if (arrSongs.size() > 0) {
@@ -3871,7 +3985,6 @@ public class HomeActivity extends Activity implements DownloadListener, OkHttpUt
 
               if (playlist.getIsSeparatinActive() == 1) {
                   sort(arrSongs);
-
               }
 
               songAdapter = new SongAdapter(HomeActivity.this, arrSongs);
@@ -4244,6 +4357,17 @@ public class HomeActivity extends Activity implements DownloadListener, OkHttpUt
 
     }
 
+    public List<Songs> getfiltersonglistplaylistwise(ArrayList<Songs> songslist,String id)
+    {
+        List<Songs> Listtosend = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Listtosend = songslist.stream()
+                    .filter(abc -> abc.getSpl_PlaylistId().equals(id))
+                    .collect(Collectors.toList());
+
+        }
+        return Listtosend;
+    }
 
     private void sendDatabaseToServer() {
 
@@ -4293,7 +4417,7 @@ public class HomeActivity extends Activity implements DownloadListener, OkHttpUt
                    String lcd= "https://api.lcdmedia-audio.com/ReceiveUpload.aspx";
                    String smc="https://applicationaddons.com/ReceiveUpload.aspx";
                     Request request = new Request.Builder()
-                            .url(lcd)
+                            .url(smc)
                             .post(requestBody)
                             .build();
 
@@ -4341,8 +4465,8 @@ public class HomeActivity extends Activity implements DownloadListener, OkHttpUt
                         try {
                             String strlcd="https://noti.lcdmedia-audio.com/pushNotification";
                             String strsmc="https://api.applicationaddons.com/pushNotification";
-
-                            SignalRClient sigR = new SignalRClient(strlcd, HomeActivity.this);
+                            String htv="https://signalr.htvled.com/pushNotification";
+                            SignalRClient sigR = new SignalRClient(strsmc, HomeActivity.this);
                         } catch (Exception e) {
                             e.getCause();
                         }
@@ -4428,6 +4552,59 @@ public class HomeActivity extends Activity implements DownloadListener, OkHttpUt
             }
         }
         return false;
+    }
+
+    public void setAlarmText(String text, String logourl,String dur)
+    {
+        Handler handler = new Handler(HomeActivity.this.getMainLooper());
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                if(alarmtxtCountTimer!=null)
+                {
+                    alarmtxtCountTimer.cancel();
+                }
+                if(mPreview.isPlaying())
+                {
+                    mPreview.stopPlayback();
+                    mPreview.reset();
+                    mPreview.clearSurfaceView();
+                }
+                portraitmp3layout.setVisibility(View.VISIBLE);
+                mPreview.setVisibility(View.INVISIBLE);
+                if(!logourl.equals("")) {
+                    Imgicon.setVisibility(View.VISIBLE);
+                    Glide.with(HomeActivity.this)
+                            .load(logourl)
+                            .into(Imgicon);
+                }
+                txtSong.setVisibility(View.VISIBLE);
+                txtSong.setText(text);
+                if((dur.equals("null")) || (dur.equals("") || (dur.equals("0"))))
+                {
+                    txtdur=15000;
+                }
+                else {
+                    txtdur=(Integer.parseInt(dur))*1000;
+                }
+                if(txtdur!=0) {
+                    alarmtxtCountTimer = new CountDownTimer(txtdur, 1000) {
+                        public void onTick(long millisUntilFinished) {
+
+                        }
+
+                        public void onFinish() {
+                            alarmtxtCountTimer.cancel();
+                            checkimgSuccesive();
+                            portraitmp3layout.setVisibility(View.INVISIBLE);
+                            txtSong.setVisibility(View.INVISIBLE);
+                            Imgicon.setVisibility(View.INVISIBLE);
+
+                        }
+                    }.start();
+                }
+            }
+        });
     }
 
     @Override
@@ -4562,6 +4739,44 @@ public class HomeActivity extends Activity implements DownloadListener, OkHttpUt
         System.exit(2);
         return;
     }
+
+
+    public void getCatschdParameters()
+    {
+        if (playlistCatSchd.size() - 1 > currentCatPlaylistIndex) {
+            currentCatPlaylistIndex++;
+        } else {
+            currentCatPlaylistIndex = 0;
+        }
+        if(playlistCatSchd.size()>0) {
+            List<Songs> filterlist=getfiltersonglistplaylistwise(filtersongsArrayList,playlistCatSchd.get(currentCatPlaylistIndex).getsplPlaylist_Id());
+            if(filterlist.size()>0) {
+                arrSongs.clear();
+                arrSongs.addAll(filterlist);
+                if(PlaylistSongindex.containsKey(playlistCatSchd.get(currentCatPlaylistIndex).getsplPlaylist_Id()))
+                {
+                    int indexcatschd=PlaylistSongindex.get(playlistCatSchd.get(currentCatPlaylistIndex).getsplPlaylist_Id());
+                    PlaylistSongindex.remove(playlistCatSchd.get(currentCatPlaylistIndex).getsplPlaylist_Id());
+                    currentlyPlayingSongAtIndex=indexcatschd;
+                    if (arrSongs.size() - 1 > currentlyPlayingSongAtIndex) {
+                        currentlyPlayingSongAtIndex++;
+                    } else {
+                        currentlyPlayingSongAtIndex = 0;
+                    }
+                }
+                PlaylistSongindex.put(playlistCatSchd.get(currentCatPlaylistIndex).getsplPlaylist_Id(), currentlyPlayingSongAtIndex);
+            }
+            else {
+                if (arrSongs.size() - 1 > currentlyPlayingSongAtIndex) {
+                    currentlyPlayingSongAtIndex++;
+                } else {
+                    currentlyPlayingSongAtIndex = 0;
+                }
+            }
+        }
+    }
+
+
 
     @Override
     public void onBackPressed() {
@@ -5424,6 +5639,101 @@ public class HomeActivity extends Activity implements DownloadListener, OkHttpUt
 
 
     }
+
+    public void opendialogAlarmText(String text,String img,String dur,String sctype)
+    {
+        int minTextSize = 12; // in SP
+        int maxTextSize = 130; // in SP
+        int stepGranularity = 2; // in SP
+        Handler handler = new Handler(HomeActivity.this.getMainLooper());
+        handler.post(new Runnable() {
+            @Override public void run() {
+                if(sctype.equals("Warning"))
+                {
+                    if(mPreview.isPlaying())
+                    {
+                        mPreview.stopPlayback();
+                        mPreview.reset();
+                        mPreview.clearSurfaceView();
+                    }
+                }
+                if(sctype.equals("Event"))
+                {
+                    if(!mPreview.isPlaying())
+                    {
+                        checkimgSuccesive();
+
+                    }
+                }
+            pickerDialog = new Dialog(HomeActivity.this,android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+            pickerDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            pickerDialog.setContentView(R.layout.custom_alert_dialog);
+                pickerDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                        WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE); //
+                pickerDialog.getWindow().getDecorView().setSystemUiVisibility(
+                        View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                ); //
+                pickerDialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+            pickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+            textAlarm= (TextView)pickerDialog.findViewById(R.id.dialogtext);
+                TextViewCompat.setAutoSizeTextTypeUniformWithConfiguration(
+                        textAlarm,
+                        minTextSize,
+                        maxTextSize,
+                        stepGranularity,
+                        TypedValue.COMPLEX_UNIT_SP // Un
+                        // it for all the above values
+                );
+            ImgAlarmdialog=(ImageView)pickerDialog.findViewById(R.id.dialogimg);
+                if(!img.equals("")) {
+                    ImgAlarmdialog.setVisibility(View.VISIBLE);
+                    Glide.with(HomeActivity.this)
+                            .load(img)
+                            .into(ImgAlarmdialog);
+                }
+                else {
+                    ImgAlarmdialog.setVisibility(View.INVISIBLE);
+                }
+                textAlarm.setText(text);
+                if((dur.equals("null")) || (dur.equals("") || (dur.equals("0"))))
+                {
+                    txtdurdia=15000;
+                }
+                else {
+                    txtdurdia=(Integer.parseInt(dur))*1000;
+                }
+                pickerDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                   // private static final int AUTO_DISMISS_MILLIS = hm.txtdurdia;
+                    @Override
+                    public void onShow(final DialogInterface dialog) {
+                       alarmtxtCountTimer= new CountDownTimer(txtdurdia, 1000) {
+                            @Override
+                            public void onTick(long millisUntilFinished) {
+
+                            }
+                            @Override
+                            public void onFinish() {
+                                if(sctype.equals("Warning"))
+                                {
+                                  checkimgSuccesive();
+                                }
+                               pickerDialog.dismiss();
+                                View decorView = getWindow().getDecorView();
+                                int uiOptions =  View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                                        | View.SYSTEM_UI_FLAG_FULLSCREEN;
+                                decorView.setSystemUiVisibility(uiOptions);
+                                //    Utilities.showToast(HomeActivity.this,"HomeAcivity");
+                                getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                            }
+                        }.start();
+                    }
+
+                });
+                pickerDialog.show();
+            }
+        });
+    }
+
 
     public void showDialogalert(long timedismiss)
     {

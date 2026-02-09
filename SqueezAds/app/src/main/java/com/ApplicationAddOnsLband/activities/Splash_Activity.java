@@ -128,7 +128,7 @@ public class Splash_Activity extends Activity implements ConnectivityReceiver.Co
             PackageManager manager = context.getPackageManager();
             PackageInfo info = manager.getPackageInfo(
                     context.getPackageName(), 0);
-             version = "2.12";
+             version = "2.13";
         }
         catch (Exception e)
         {
@@ -283,8 +283,8 @@ public class Splash_Activity extends Activity implements ConnectivityReceiver.Co
         pickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         pickerDialog.setTitle(R.string.alert_dialog_OnplaylistClick_title);
         pickerDialog.setCanceledOnTouchOutside(false);
-        Button BtnSavedialog  = (Button) pickerDialog.findViewById(R.id.btnsplashsave);
-        radioGroup = (RadioGroup) pickerDialog.findViewById(R.id.radiofamily);
+        //Button BtnSavedialog  = (Button) pickerDialog.findViewById(R.id.btnsplashsave);
+       // radioGroup = (RadioGroup) pickerDialog.findViewById(R.id.radiofamily);
         BtnSavedialog.setOnClickListener(this);
         radioGroup.setOnCheckedChangeListener(
                 new RadioGroup

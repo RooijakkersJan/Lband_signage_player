@@ -112,6 +112,23 @@ public class PlaylistDataSource {
     * get all playlist
     * */
 
+    public ArrayList<Playlist> getAllDistinctPlaylists() {
+        ArrayList<Playlist> playlists = new ArrayList<Playlist>();
+
+        Cursor cursor=database.query(true,MySQLiteHelper.TABLE_PLAYLIST,
+                allColumns,MySQLiteHelper.COLUMN_SP_PLAYLIST_ID,null,null,null, null,null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            Playlist playlist = cursorToPlaylist(cursor);
+            playlists.add(playlist);
+            cursor.moveToNext();
+        }
+        // make sure to close the cursor
+        cursor.close();
+        return playlists;
+    }
+
+
     public ArrayList<Playlist> getAllPlaylists() {
 
         // Check Device Current Time In 12 Hours Format

@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:background="@color/_status_bar"
+    android:background="@color/black"
     android:layout_height="match_parent">
 
     <com.github.rongi.rotate_layout.layout.RotateLayout
@@ -22,54 +22,34 @@
                 android:id="@+id/songtitle1"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="0.10"
-                android:gravity="center_vertical"
-                android:text="Song"
+                android:layout_weight="0.70"
+                android:textAlignment="center"
+                android:text="Song ihvhhvhvhvhvhvhvhvvhvh "
                 android:layout_marginTop="10dp"
                 android:textColor="#ffffff"
-                android:textAlignment="center"
-                android:textSize="35dp"
                 android:visibility="visible" />
-
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="0.30">
-
-            </TextView>
 
 
             <ImageView
                 android:id="@+id/imgID5"
-                android:layout_width="250dp"
-                android:layout_height="0dp"
-                android:layout_gravity="center"
-                android:layout_weight="0.20"
-                android:scaleType="fitCenter"
-                android:src="@drawable/jj"
-                android:padding="15dp"
-                android:visibility="visible"/>
-
-
-            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="0.30">
-
-            </TextView>
+                android:layout_gravity="center"
+                android:layout_weight="0.30"
+                android:src="@drawable/jj"
+                android:visibility="invisible"/>
 
             <TextView
                 android:id="@+id/Artist"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="0.10"
+                android:layout_weight="0.01"
                 android:singleLine="true"
                 android:textColor="#ffffff"
                 android:text="Artist"
                 android:textAlignment="center"
-                android:textSize="35dp"
-                android:visibility="visible" />
+                android:textSize="0dp"
+                android:visibility="gone" />
 
 
         </LinearLayout>
