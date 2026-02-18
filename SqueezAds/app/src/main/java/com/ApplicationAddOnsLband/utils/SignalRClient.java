@@ -63,8 +63,11 @@ public class SignalRClient
                     String audiourl=jsonObj.getString("audioPromoUrl");
                     String logourl=jsonObj.getString("logoPromoUrl");
                     String audioPromoid=jsonObj.getString("audioPromoId");
+                    String audioPromoname=jsonObj.getString("audioPromoName");
                     String duration=jsonObj.getString("alarmTextDuration");
                     String promofilesize=jsonObj.getString("audioPromoFileSize");
+                    String logoPromonId=jsonObj.getString("logoPromoId");
+                    String logoPromoname=jsonObj.getString("logoPromoName");
                     String screencasttype=jsonObj.getString("screencasttype");
 
                     if (type.equalsIgnoreCase("Stop")) {
@@ -77,14 +80,14 @@ public class SignalRClient
                     if(datatype.equalsIgnoreCase("alarm"))
                     {
                         cat="Normal";
-                        HomeActivity.getInstance().playnextsongfromweb(audioPromoid, audiourl, duration, ArtistId, txt, logourl, 0, Long.parseLong(promofilesize), cat,screencasttype);
+                        HomeActivity.getInstance().playnextsongfromweb(audioPromoid, audiourl, duration, ArtistId, txt, logourl, 0, Long.parseLong(promofilesize), cat,audioPromoid,audioPromoname,duration,logoPromonId,logoPromoname,screencasttype,datatype);
                         return;
                     }
 
                     if (datatype.equalsIgnoreCase("Song")) {
                         //  Utilities.showToast(context,"Request Received");
                      //   Utilities.showToast(context,"Play");
-                        HomeActivity.getInstance().playnextsongfromweb(id, Url, AlbumId, ArtistId, titlename, Artistname, repeat, Long.parseLong(filesize), cat,"");
+                        HomeActivity.getInstance().playnextsongfromweb(id, Url, AlbumId, ArtistId, titlename, Artistname, repeat, Long.parseLong(filesize), cat,"","","","","","","");
                         return;
                     }
 

@@ -138,6 +138,12 @@ public class HomeActivity extends Activity implements DownloadListener, OkHttpUt
     public static final String TAG = "HomeActivity";
 
     private final int VIDEO_VIEW_TAG = 1;
+    String univlogopromoname="";
+    String univlogopromoId="";
+    String univsctype="";
+    String univpromotitle="";
+
+
     boolean rearrange=false;
     int txtdurdia=0;
     int txtdur;
@@ -218,6 +224,7 @@ public class HomeActivity extends Activity implements DownloadListener, OkHttpUt
     public static ArrayList<Advertisements> arrAdvertisementsMinute = new ArrayList<Advertisements>();
 
     private int currentlyPlayingSongAtIndex = 0;
+
 
     public static int currentlyPlayingAdAtIndex = -1;
     public TextView textAlarm;
@@ -895,9 +902,6 @@ public class HomeActivity extends Activity implements DownloadListener, OkHttpUt
 //        saveLogcatToFile(HomeActivity.this);
     }
 
-
-
-
     public static HomeActivity getInstance() {
         return hm;
     }
@@ -1464,8 +1468,15 @@ public class HomeActivity extends Activity implements DownloadListener, OkHttpUt
 
 
 
-    public void playnextsongfromweb(String songid, String url, String albumid, String artistid, final String title, final String artname,int repeat,long filesize,String cat,String screencasttype) {
+    public void playnextsongfromweb(String songid, String url, String albumid, String artistid, final String title, final String artname,int repeat,long filesize,String cat,String audiopromoid,String audiopromoname,String dur,String logopromoid,String logopromoname ,String screencasttype,String type) {
         try {
+            univlogopromoname="";
+            univlogopromoId="";
+            univsctype="";
+            univlogopromoname=logopromoname;
+            univlogopromoId=logopromoid;
+            univsctype=screencasttype;
+            univpromotitle=audiopromoname;
             if(cat.equals("Ads"))
             {
                 gblSongid=songid;
@@ -1486,6 +1497,7 @@ public class HomeActivity extends Activity implements DownloadListener, OkHttpUt
                     alarmtxtCountTimer.cancel();
                 }
                 opendialogAlarmText(title,artname,albumid,screencasttype);
+                insertInstantLogs(0,title,audiopromoid,audiopromoname,dur,logopromoid,logopromoname,screencasttype,type);
                 return;
             }
 
@@ -1543,6 +1555,20 @@ public class HomeActivity extends Activity implements DownloadListener, OkHttpUt
 
     }
 
+    public void insertInstantLogs(int titleid,String title,String audiopromoid,String audiopromoname,String dur,String logopromoid,String logopromoname,String screencasttype,String type)
+    {
+        String start_date_Time="";
+        Calendar calendar;
+        calendar = Calendar.getInstance();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MMM/yyyy hh:mm:ss a", Locale.US);
+        Date date = calendar.getTime();
+        start_date_Time = simpleDateFormat.format(date);
+
+        PlayerStatusManager playerStatusManager = new PlayerStatusManager(HomeActivity.this);
+        playerStatusManager.updateInstantStatus(start_date_Time,titleid,title,audiopromoid,audiopromoname,dur,logopromoid,logopromoname,screencasttype,type);
+
+    }
+
    public void playCurrentContent(ArrayList<Songs> arrinst,int instantcurrindex,String txt,String logourl)
    {
        try {
@@ -1579,6 +1605,8 @@ public class HomeActivity extends Activity implements DownloadListener, OkHttpUt
                }
            }
            String f = arrinst.get(instantcurrindex).getTitle_Url();
+          // String titleid=arrinst.get(instantcurrindex).getTitle();
+
            String a = f.substring(f.length() - 3);
            if (a.equals("mp4")) {
 
@@ -1614,6 +1642,8 @@ public class HomeActivity extends Activity implements DownloadListener, OkHttpUt
                            playNextSongIex=-1;
                            temploop=0;
                        }
+                       insertInstantLogs(Integer.parseInt(arrinst.get(instantcurrindex).getTitle_Id()),txt,"0","0","0","0","0","nnk","Song");
+
 
                    }
                });
@@ -1670,6 +1700,8 @@ public class HomeActivity extends Activity implements DownloadListener, OkHttpUt
                            playNextSongIex=-1;
                            temploop=0;
                        }
+                       String h=arrinst.get(instantcurrindex).getTitle();
+                       insertInstantLogs(0,txt,arrinst.get(instantcurrindex).getTitle_Id(),univpromotitle,"0",univlogopromoId,univlogopromoname,univsctype,"Alarm");
 
                    }
                });

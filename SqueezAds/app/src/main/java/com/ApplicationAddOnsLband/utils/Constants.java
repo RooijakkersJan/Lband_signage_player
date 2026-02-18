@@ -84,6 +84,9 @@ public class Constants {
     public static final String Get_RSS_Txt = SERVER + "GetPlayerAssginRss";
     public static final int RSS_DETAILS_TAG = 19;
 
+   public static final String Send_Instant = SERVER + "InstantPlayedStatus";
+   public static final int SendInstant_TAG = 22;
+
     public static final String PLAYED_PRAYER_STATUS_STREAM = SERVER + "PlayedPrayerStatusJsonArray";// played prayer status
     public static final String KEY_PLAYLIST_NAMES_ARRAY = "playlistNamesArray";
 

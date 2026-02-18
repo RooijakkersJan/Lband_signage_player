@@ -692,6 +692,37 @@ public class PlayerStatusManager implements OkHttpUtil.OkHttpResponse {
             e.getCause();
         }
     }
+    public void updateInstantStatus(String start_date_Time,int titleid,String title,String audiopromoid,String audiopromoname,String dur,String  logopromoid,String  logopromoname,String screencasttype,String type)
+    {
+        try {
+            JSONObject jsonObject = new JSONObject();
+            JSONArray jsonary = new JSONArray();
+            jsonObject.put("PlayedDateTime",start_date_Time);
+            jsonObject.put("TitleId",titleid);
+            jsonObject.put("TokenId",SharedPreferenceUtil.getStringPreference(PlayerStatusManager.this.context,Constants.TOKEN_ID));
+            jsonObject.put("alarmName",title);
+            jsonObject.put("audioPromoId",audiopromoid);
+            jsonObject.put("audioPromoName",audiopromoname);
+            jsonObject.put("clientid",SharedPreferenceUtil.getStringPreference(context, AlenkaMediaPreferences.DFCLIENT_ID));
+            jsonObject.put("duration",dur);
+            jsonObject.put("logoPromoId",logopromoid);
+            jsonObject.put("logoPromoName",logopromoname);
+            jsonObject.put("screencasttype",screencasttype);
+            jsonObject.put("type",type);
+            jsonary.put(jsonObject);
+
+            new OkHttpUtil(this.context,Constants.Send_Instant,jsonary.toString(),
+                    PlayerStatusManager.this,false,
+                    Constants.SendInstant_TAG).
+                    callRequest();
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+
+
 
     public void sendHeartBeatStatusOnServer(){
         try{
@@ -766,6 +797,9 @@ public class PlayerStatusManager implements OkHttpUtil.OkHttpResponse {
                 Log.e("Updated download status",response);
             }break;
             case Constants.UPDATE_Ads_DETAILS_TAG:{
+                Log.e("Updated Ads status",response);
+            }break;
+            case Constants.SendInstant_TAG:{
                 Log.e("Updated Ads status",response);
             }break;
         }
