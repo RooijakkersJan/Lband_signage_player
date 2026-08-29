@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.ApplicationAddOnsLband"
+    package="com.ApplicationAddonsSignage"
     android:installLocation="internalOnly">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -21,7 +20,7 @@
 
 
     <application
-        android:name="com.ApplicationAddOnsLband.application.AlenkaMedia"
+        android:name="com.ApplicationAddonsSignage.application.AlenkaMedia"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
         android:icon="@drawable/smcappicon"
@@ -33,7 +32,7 @@
 
 
         <receiver
-            android:name="com.ApplicationAddOnsLband.receiver.LaunchReceiver"
+            android:name="com.ApplicationAddonsSignage.receiver.LaunchReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -46,17 +45,18 @@
         </receiver>
 
         <receiver
-            android:name="com.ApplicationAddOnsLband.alarm_manager.MyReceiver"
+            android:name="com.ApplicationAddonsSignage.alarm_manager.MyReceiver"
             android:enabled="true"
             android:exported="true"></receiver>
 
         <service
-            android:name="com.ApplicationAddOnsLband.alarm_manager.MyService"
+            android:name="com.ApplicationAddonsSignage.alarm_manager.MyService"
             android:enabled="true"
-            android:exported="true" />
+            android:exported="true"
+            android:foregroundServiceType="dataSync"/>
 
         <activity
-            android:name="com.ApplicationAddOnsLband.activities.Splash_Activity"
+            android:name="com.ApplicationAddonsSignage.activities.Splash_Activity"
             android:launchMode="singleTask"
             android:screenOrientation="landscape"
             android:theme="@style/MyHomeActivityTheme"
@@ -68,34 +68,23 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.ApplicationAddOnsLband.activities.LoginActivity"
+            android:name="com.ApplicationAddonsSignage.activities.LoginActivity"
             android:screenOrientation="landscape"
             android:theme="@style/MyHomeActivityTheme" />
 
         <activity
-            android:name="com.ApplicationAddOnsLband.activities.SettingsActivity"
+            android:name="com.ApplicationAddonsSignage.activities.SettingsActivity"
             android:screenOrientation="landscape"
             android:theme="@style/MyHomeActivityTheme" />
 
         <activity
-            android:name="com.ApplicationAddOnsLband.activities.HomeActivity"
+            android:name="com.ApplicationAddonsSignage.activities.HomeActivity"
             android:configChanges="orientation|screenSize"
             android:hardwareAccelerated="true"
             android:screenOrientation="landscape"
             android:theme="@style/MyHomeActivityTheme" />
 
-        <service android:name="com.ApplicationAddOnsLband.api_manager.DownloadService" />
-
-
-        <service
-            android:name="com.ApplicationAddOnsLband.utils.MyFirebaseMessagingService"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
-
+        <service android:name="com.ApplicationAddonsSignage.api_manager.DownloadService" />
 
     </application>
 

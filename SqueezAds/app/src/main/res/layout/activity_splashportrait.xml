@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:gravity="center"
     android:background="@color/main_top_status_bar_color"
-    tools:context="com.ApplicationAddOnsLband.activities.Splash_Activity">
+    tools:context="com.ApplicationAddonsSignage.activities.Splash_Activity">
 
 
     <com.github.rongi.rotate_layout.layout.RotateLayout

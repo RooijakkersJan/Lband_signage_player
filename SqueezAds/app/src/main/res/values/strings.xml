@@ -1,6 +1,6 @@
 <resources>
     <!--AppName-->
-    <string name="app_name">SqueezeSignage</string>
+    <string name="app_name">Signage</string>
 
     <!--Check Internet Connection Message-->
     <string name="isinternet">Internet Connection Error\nPlease connect to working Internet connection.</string>

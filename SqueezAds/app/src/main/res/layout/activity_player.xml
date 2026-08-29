@@ -5,25 +5,11 @@
     android:layout_height="match_parent"
     android:keepScreenOn="true"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.ApplicationAddOnsLband.activities.HomeActivity"
+    tools:context="com.ApplicationAddonsSignage.activities.HomeActivity"
     android:background="@color/black"
     android:fitsSystemWindows="true"
     android:id="@+id/mainContainer">
 
-    <com.github.rongi.rotate_layout.layout.RotateLayout
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/rotateimg"
-        app:angle="0">
-
-        <ImageView
-            android:id="@+id/previmg"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="fitXY"
-            android:visibility="invisible"/>
-    </com.github.rongi.rotate_layout.layout.RotateLayout>
 
     <com.github.rongi.rotate_layout.layout.RotateLayout
         android:layout_width="match_parent"
@@ -31,7 +17,7 @@
         android:id="@+id/rotatevideo1"
         app:angle="0">
 
-        <com.ApplicationAddOnsLband.custom_views.Lvideoads
+        <com.ApplicationAddonsSignage.custom_views.Lvideoads
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/video_viewads"
@@ -57,8 +43,6 @@
         android:layout_height="230dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true">
-
-
 
         <ProgressBar
             android:id="@+id/p_Bar2"
@@ -145,7 +129,7 @@
         android:id="@+id/rotatevideo"
         app:angle="0">
 
-        <com.ApplicationAddOnsLband.custom_views.MyClaudVideoView
+        <com.ApplicationAddonsSignage.custom_views.MyClaudVideoView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/video_view"
@@ -153,15 +137,29 @@
     </com.github.rongi.rotate_layout.layout.RotateLayout>
 
     <com.github.rongi.rotate_layout.layout.RotateLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/rotateweb"
+        android:id="@+id/rotateimg"
         app:angle="0">
 
+        <ImageView
+            android:id="@+id/previmg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:visibility="invisible"/>
+    </com.github.rongi.rotate_layout.layout.RotateLayout>
+
+    <com.github.rongi.rotate_layout.layout.RotateLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/webrotate"
+        app:angle="0">
         <WebView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone"
+            android:visibility="invisible"
             android:id="@+id/webView" />
     </com.github.rongi.rotate_layout.layout.RotateLayout>
 

@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:gravity="center"
     android:background="#142047"
-    tools:context="com.ApplicationAddOnsLband.activities.Splash_Activity">
+    tools:context="com.ApplicationAddonsSignage.activities.Splash_Activity">
 
         <ImageView
             android:id="@+id/imgsetting"
@@ -19,10 +19,11 @@
             android:src="@drawable/setting" />
 
         <ImageView
+
             android:id="@+id/imgID"
             android:layout_marginTop="0dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="300dp"
             android:scaleType="fitCenter"
             android:src="@drawable/smclogo" />
 
